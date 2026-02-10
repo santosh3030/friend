@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Fun</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    font-family: Arial, Helvetica, sans-serif;
+    overflow: hidden;
+  }
+  .card {
+    background: linear-gradient(135deg, #fff0f6, #ffd6e8);
+    padding: 40px 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(225,29,72,0.12);
+    max-width: 420px;
+    width: 90%;
+    position: relative;
+    z-index: 2;
+    border: 1px solid rgba(225,29,72,0.06);
+  }
+  h1 { 
+    margin-bottom: 30px;
+    font-size: 24px;
+    color: #e11d48;
+  }
+  .buttons {
+    position: relative;
+    height: 80px;
+  }
+  button {
+    padding: 12px 28px;
+    font-size: 16px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+  }
+  #babhiBtn {
+    background: #ec4899;
+    color: white;
+  }
+  #girlfriendBtn {
+    background: #06b6d4;
+    color: white;
+  }
+  #moveBtn {
+    background: #ef4444;
+    color: white;
+    position: fixed; /* allow it to move around the whole viewport */
+    left: 50%;
+    top: 60%;
+    transform: translate(-50%, -50%);
+    transition: left 0.22s ease, top 0.22s ease, transform 0.22s ease;
+    z-index: 6;
+    border-radius: 30px;
+  }
+  #stickerLink {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 8px 12px;
+    background: rgba(0,0,0,0.04);
+    border-radius: 12px;
+    color: #be185d;
+    text-decoration: none;
+    font-weight: bold;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  #stickerLink:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.12);
+  }
+  #stickerImg {
+    display: block;
+    margin: 16px auto 0;
+    max-width: 220px;
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  #stickerImg:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.16);
+  }
+
+  /* Share block styles */
+  .share-block {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 12px;
+  }
+  .share-block button,
+  .share-block .share-btn {
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: none;
+    background: #fff;
+    color: #be185d;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.06);
+    transition: transform 0.14s ease, box-shadow 0.14s ease;
+  }
+  .share-block button:hover,
+  .share-block .share-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+  }
+
+  #resultImg {
+    display: block;
+    max-width: 70%;
+    border-radius: 12px;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+    transition: transform 0.18s ease;
+    cursor: default;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+  }
+  #resultImg:hover {
+    transform: translate(-50%, -50%) scale(1.02);
+  }
+  #resultVideo {
+    display: block;
+    max-width: 70%;
+    border-radius: 12px;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+  }
+  #singleMsg {
+    position: absolute;
+    left: 50%;
+    top: calc(50% + 160px);
+    transform: translateX(-50%);
+    color: #be185d;
+    font-size: 28px;
+    font-weight: 700;
+    z-index: 5;
+    text-align: center;
+    opacity: 0;
+    animation: fadeIn 0.4s forwards 0.6s;
+  }
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+  .heart {
+    position: absolute;
+    font-size: 24px;
+    animation: floatUp 3s infinite ease-in;
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(0px); opacity: 1; }
+    100% { transform: translateY(-200px); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card" id="mainCard">
+  <h1>tuma ladki chaya is valentine</h1>
+  <div class="buttons">
+    <button id="babhiBtn">Babhi</button>
+    <button id="girlfriendBtn">Girlfriend</button>
+  </div>
+  <button id="moveBtn">koi nahi</button>
+  <a id="stickerLink" href="https://pin.it/2Ix4pfe4j" target="_blank" rel="noopener noreferrer">
+    <img id="stickerImg" src="don.jpg" alt="Sticker preview">
+  </a>
+
+
+</div>
+
+<script>
+// make moveBtn button float away across the whole page
+const moveBtn = document.getElementById('moveBtn');
+function moveMoveButton() {
+  // ensure the button is positioned relative to the viewport
+  moveBtn.style.position = 'fixed';
+  moveBtn.style.transform = 'none';
+  const padding = 12; // keep some space from edges
+  const rect = moveBtn.getBoundingClientRect();
+  const maxX = Math.max(window.innerWidth - rect.width - padding, padding);
+  const maxY = Math.max(window.innerHeight - rect.height - padding, padding);
+  const x = Math.floor(Math.random() * (maxX - padding)) + padding;
+  const y = Math.floor(Math.random() * (maxY - padding)) + padding;
+  moveBtn.style.left = x + 'px';
+  moveBtn.style.top = y + 'px';
+}
+moveBtn.addEventListener('mouseenter', moveMoveButton);
+moveBtn.addEventListener('click', moveMoveButton);
+// keep it visible when the window is resized
+window.addEventListener('resize', () => {
+  const r = moveBtn.getBoundingClientRect();
+  if (r.right > window.innerWidth || r.bottom > window.innerHeight) moveMoveButton();
+});
+
+// Babhi button action
+const babhiBtn = document.getElementById('babhiBtn');
+babhiBtn.addEventListener('click', () => {
+  showSecondPage('Babhi');
+});
+
+// Girlfriend button action
+const girlfriendBtn = document.getElementById('girlfriendBtn');
+girlfriendBtn.addEventListener('click', () => {
+  showSecondPage('Girlfriend');
+});
+
+function showSecondPage(buttonType) {
+  document.getElementById("mainCard").style.display = "none";
+
+  // confetti hearts
+  for (let i = 0; i < 50; i++) {
+    addHeart();
+  }
+
+  // show video and message based on button clicked
+  setTimeout(() => {
+    const video = document.createElement('video');
+    video.id = 'resultVideo';
+    video.src = '0210.mp4';
+    video.controls = true;
+    video.autoplay = true;
+    document.body.appendChild(video);
+
+    const msg = document.createElement('div');
+    msg.id = 'singleMsg';
+    if (buttonType === 'Babhi') {
+      msg.innerText = 'You chose Babhi!';
+    } else if (buttonType === 'Girlfriend') {
+      msg.innerText = 'You chose Girlfriend!';
+    }
+    document.body.appendChild(msg);
+  }, 500);
+}
+
+function startFun() {
+  document.getElementById("mainCard").style.display = "none";
+
+  // confetti hearts
+  for (let i = 0; i < 50; i++) {
+    addHeart();
+  }
+ 
+
+  // show image and the word 'single' after YES
+  setTimeout(() => {
+    const img = document.createElement('img');
+    img.id = 'resultImg';
+    img.src = 'kaise.jpg';
+    img.alt = 'Result image';
+    document.body.appendChild(img);
+
+    const msg = document.createElement('div');
+    msg.id = 'singleMsg';
+    msg.innerText = 'single mara ga l****';
+    document.body.appendChild(msg);
+  }, 500);
+}
+
+function copyLink() {
+  const url = window.location.href;
+  try {
+    navigator.clipboard.writeText(url);
+    alert('Link copied! Paste it to your friend.');
+  } catch (e) {
+    prompt('Copy this link:', url);
+  }
+}
+
+function updateShareLinks() {
+  const url = encodeURIComponent(window.location.href);
+  const text = encodeURIComponent('Check out my page: ' + window.location.href);
+  const wa = document.getElementById('waShare');
+  const mail = document.getElementById('emailShare');
+  if (wa) wa.href = `https://wa.me/?text=${text}`;
+  if (mail) mail.href = `mailto:?subject=${encodeURIComponent('Check this out')}&body=${text}`;
+
+  // also update clones if present
+  const wa2 = document.getElementById('waShareResult');
+  const mail2 = document.getElementById('emailShareResult');
+  if (wa2) wa2.href = `https://wa.me/?text=${text}`;
+  if (mail2) mail2.href = `mailto:?subject=${encodeURIComponent('Check this out')}&body=${text}`;
+}
+
+// wire up main copy button
+const copyBtn = document.getElementById('copyLinkBtn');
+if (copyBtn) copyBtn.addEventListener('click', copyLink);
+
+// populate share links now
+updateShareLinks();
+
+function addHeart() {
+  const heart = document.createElement('div');
+  heart.className = "heart";
+  heart.innerText = "❤️";
+  heart.style.left = Math.random() * window.innerWidth + "px";
+  heart.style.animationDuration = 2 + Math.random() * 2 + "s";
+  document.body.appendChild(heart);
+}
+</script>
+
+</body>
+</html>
